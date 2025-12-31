@@ -37,34 +37,7 @@
             </div>
             <div class="ejercicios">
                 <h3>Ejercicio Uno</h3>
-            <p>Consultar los productos comprados por el cliente número 1</p>
-            <p>Usando el codigo de SQL <br> 
-            <div class="code-block">
-                <div class ="code-header">SQL</div>
-                <pre><code>SELECT 
-    c.nombre_cliente,
-    v.fecha,
-    v.total_venta,
-    GROUP_CONCAT(dv.precio_unitario) AS precio, 
-    GROUP_CONCAT(dv.cantidad) AS cantidad,
-    GROUP_CONCAT(p.nombre_producto SEPARATOR " | ") AS productos,
-    SUM(dv.precio_unitario * dv.cantidad) AS total_calculado
-FROM cliente c 
-INNER JOIN venta v
-    ON c.id_cliente = v.cliente_id
-INNER JOIN detalleventa dv 
-    ON v.id_venta = dv.venta_id
-INNER JOIN producto p
-    ON dv.producto_id = p.id_producto
-WHERE c.id_cliente = 1
-GROUP BY dv.venta_id;</code></pre></div> <br>
-se visualizara de la siguiente forma: <br>
-<img src="Imagenes/Ejercicio1BD.png" alt="Ejercicio 1 BD" width="700" height="auto"></p>
-            </div>
-    <div class="ejercicios">
-        <h3>Ejercicio Dos</h3>
-        <p>
-             Consulta todos los estudiantes cuyo promedio sea mayor a 7. <br>
+            <p>Consulta todos los estudiantes cuyo promedio sea mayor a 7. <br>
              <b>solucion:</b><br> Usando el codigo SQL: <br>
              <div class="code-block">
                 <div class ="code-header">SQL</div>
