@@ -1,8 +1,6 @@
 body{
     font-family: arial, sans-serif;
-    background-image: url(Imagenes/fondoweb.jpeg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: beige;
     margin: 0;
     padding: 0;
     display: flex;
