@@ -436,9 +436,106 @@ la visualizacion es la siguiente: <br>
 <img src="Imagenes/consultad4.7.png" alt="consulta deber 4 punto 7" width="400" height="auto"><br>
         </div></p>
 </div>
+<div class="ejercicios">
+    <h3>leccion 1: Procedimientos almacenados</h3>
+    <p> Un procedimiento almacenado es un conjunto de instrucciones SQL que se almacenan en la base de datos y 
+        <br>se pueden ejecutar cuando se necesiten. 
+        <br>Permiten encapsular lógica de negocio y reutilizar código.</p>
+        <h5>como se crean los procesos almacenados</h5>
+        <p>para crearlos se usa la sentencia "create procedure"
+            establecer parametros de entrada y salida si es necesario,<br>
+            establecer las instrucciones entre los textos "begin" y "end"<br>
+            usar el texto "delimiter" al inicio y al final para evitar conflictos con el punto y coma dentro del procedimiento.<br>
+        </p>
+        <h5>para que se usan y cuales son las ventajas</h5>
+        <p>se usan para encapsular logica de negocio, mejorar el rendimiento, seguridad y mantenimiento del codigo.<br>
+            las ventajas son: reutilizacion de codigo, rendimiento mejorado, seguridad, mantenimiento centralizado y reduccion del trafico de red.<br>
+        </p>
+        <h5>ejemplo practico</h5>
+        <p>
+            usaremos una tabla de alguno de los deberes anteriores, en este caso usaremos la tabla de estudiantes del deber 4<br>
+            crearemos un procedimento almacenado que nos permita revisar cuando un nuevo estudiante es registrado, cuando uno es removido y cuando uno es actualizado.<br>
+            luego crearemos otros procedimientos almacenados que nos digan que estudiantes estan aprobados y cuales no.<br>
+            partamos con el primer procedimiento almacenado: estudiante registrado<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+CREATE PROCEDURE est_reg(in N varchar(100), A varchar(100), E varchar(100), ID int)
+BEGIN
+INSERT INTO estudiantes (nombre,apellido,email,id_curso) VALUES (N, A, E, ID);
+END //
+DELIMITER ;</code></pre>
+            </div><br>
+            este procedimiento almacenado nos permite registrar un nuevo estudiante en la tabla estudiante del deber 4<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL est_reg('jose', 'lopez', 'jose@gmail.com', 1);</code></pre>
+            </div><br>
+            si todo salio bien, el estudiante jose lopez deberia estar registrado en la tabla estudiantes, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le1.png" alt="Prueba procedimiento almacenado leccion 1" width="400" height="auto"><br>
+            ahora crearemos el procedimiento almacenado para eliminar un estudiante<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+                    create procedure elim_est (in id_est int)
+                    begin
+                        delete from estudiantes where id_estudiante = id_est;
+                    end //
+                DELIMITER ;</code></pre>
+            </div><br>
+            este procedimiento almacenado nos permite eliminar un estudiante de la tabla estudiantes usando su id_estudiante<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
+            y en este caso eliminaremos al estudiante jose lopez cuyo id es 1<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL elim_est(1);</code></pre>
+            </div><br>
+            si todo salio bien, el estudiante jose lopez deberia haber sido eliminado de la tabla estudiantes, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le2.png" alt="Prueba procedimiento almacenado leccion 1 eliminacion" width="400" height="auto"><br>
+            ahora crearemos el procedimiento almacenado para actualizar un estudiante<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+                    create procedure act_est (in id_est int, n varchar(500), a varchar (500), e varchar(500), id_c int)
+                    begin
+                    update estudiantes set nombre = n, apellido = a, email = e, id_curso = id_c where id_estudiante = id_est;
+                    end //
+                    delimiter ;</code></pre></div><br>
+            este procedimiento almacenado nos permite actualizar los datos de un estudiante en la tabla estudiantes usando su id_estudiante<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
+            pero tendremos que añadir un nuevo estudiante para actualizarlo, en este caso añadiremos a "maria gonzalez"<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>INSERT INTO estudiantes (nombre, apellido, email, id_curso) VALUES ('maria', 'gonzalez', 'maria@gmail.com', 1);</code></pre>
+            </div><br>
+            ahora actualizaremos a maria gonzalez cuyo id es 2<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL act_est(2, 'maria', 'lopez', 'maria@gmail.com', 1);</code></pre>
+            </div><br>
+            si todo salio bien, el estudiante maria gonzalez deberia haber sido actualizado en la tabla estudiantes, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le3.png" alt="Prueba procedimiento almacenado leccion 1 actualizacion" width="400" height="auto"><br>
+            ahora crearemos el procedimiento almacenado para añadir asignaturas nuevas<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+                    create procedure add_asig (in nom_asig varchar(100), id_prof int)
+                    begin
+                    insert into asignaturas (nombre_asignatura, id_profesor) values (nom_asig, id_prof);
+                    end //
+                    DELIMITER ;</code></pre></div><br>
+            este procedimiento almacenado nos permite añadir nuevas asignaturas a la tabla asignaturas<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
+            en este caso añadiremos la asignatura "desarrollo web" con el id del profesor 1<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL add_asig('desarrollo web', 1);</code></pre></div><br>
+            si todo salio bien, la asignatura desarrollo web deberia haber sido añadida en la tabla asignaturas, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le4.png" alt="Prueba procedimiento almacenado leccion 1 add asignatura" width="400" height="auto"><br>
+            
         </p>
     </div>
-        </main>
+</main>
     </body>
-
 </html>
