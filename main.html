@@ -153,11 +153,20 @@ FOREIGN KEY (id_curso) REFERENCES Cursos(id_curso);</code></pre>
         aqui añadire una tabla mas con datos para la consulta de las actividades que tiene una materia<br>
         <div class="code-block">
             <div class="code-header">SQL</div>
-            <pre><code>INSERT INTO Asignaturas (nombre_asignatura, id_profesor) VALUES
-('Matemáticas I', 1), -- Primer semestre
-('Lengua y Literatura I', 2), -- Primer semestre
-('Física II', 1), -- Segundo semestre
-('Historia II', 2); -- Segundo semestre</code></pre>
+            <pre><code>CREATE TABLE Actividades (
+    id_actividad INT PRIMARY KEY AUTO_INCREMENT,
+    id_asignatura INT,
+    tipo VARCHAR(50), -- Deber, Lección, Examen
+    descripcion VARCHAR(200),
+    FOREIGN KEY (id_asignatura) REFERENCES Asignaturas(id_asignatura)
+);
+
+INSERT INTO Actividades (id_asignatura, tipo, descripcion) VALUES
+(1, 'Deber', 'Ejercicios de álgebra'),
+(1, 'Lección', 'Prueba corta de fracciones'),
+(1, 'Examen', 'Examen final de Matemáticas I'),
+(3, 'Deber', 'Problemas de cinemática'),
+(3, 'Examen', 'Examen final de Física II');</code></pre>
         </div> <br>
         <div class="code-block">
             <div class="code-header">SQL</div>
