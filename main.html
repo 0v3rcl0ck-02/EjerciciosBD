@@ -336,13 +336,17 @@ CREATE TABLE Horarios (
 INSERT INTO Cursos (nombre_curso) VALUES ('cuarto semestre');
 
 -- Profesores
-INSERT INTO Profesores (nombre, apellido, email) VALUES ('Darwin', 'Chamba', 'ChambaD@gmail.com'), ("Karelys", "Arredondo", "KareliA@gmail.com");
+INSERT INTO Profesores (nombre, apellido, email) 
+VALUES ('Darwin', 'Chamba', 'ChambaD@gmail.com'), ("Karelys", "Arredondo", "KareliA@gmail.com");
 
 -- Asignaturas
-INSERT INTO Asignaturas (nombre_asignatura, id_profesor) VALUES ('programacion orientada a objetos', 1), ("arquitectura de software",2), ("manejo de base de datos",1),("realidad nacional-deberes y derechos",2);
+INSERT INTO Asignaturas (nombre_asignatura, id_profesor) 
+VALUES ('programacion orientada a objetos', 1), ("arquitectura de software",2), 
+("manejo de base de datos",1),("realidad nacional-deberes y derechos",2);
 
 -- Aulas
-INSERT INTO Aulas (nombre_aula, capacidad) VALUES ('aula1', 15), ('aula 7', 12);
+INSERT INTO Aulas (nombre_aula, capacidad) 
+VALUES ('aula1', 15), ('aula 7', 12);
 
 -- Horarios
 INSERT INTO Horarios (id_curso, id_asignatura, id_aula, dia_semana, hora_inicio, hora_fin)
