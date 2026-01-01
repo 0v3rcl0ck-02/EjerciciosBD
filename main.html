@@ -258,8 +258,98 @@ esta consulta señala a los alumnos suspensos en segundo semestre y se visualiza
 <img src="Imagenes/consulta8.png" alt="resultado consulta 8" width="400" height="auto"><br>
 para finalizar esta tarea se ha elaborado el visual del diagrama de la base de datos creada en dbdiagram<br>
 <iframe width="560" height="315" src='https://dbdiagram.io/e/6956b00939fa3db27bec57f5/6956b04d39fa3db27bec59fd'> </iframe>
+</p>
+    </div>
+    <div class="ejercicios">
+        <h3>deber 4: Sistema de Horarios de Clases</h3>
+        <p>
+            el objetivo de este deber es el siguiente: <br>
+            Normalizar y diseñar una base de datos para el sistema de horarios de la carrera de Desarrollo de Software. <br>
+            se creara una nueva base de datos sql que la denomimanemos "deber4" y en ella usaremos el siguiente codigo SQL:<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>-- Tabla de Cursos
+CREATE TABLE Cursos (
+    id_curso INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_curso VARCHAR(100) NOT NULL
+);
 
-    </p>
+-- Tabla de Estudiantes
+CREATE TABLE Estudiantes (
+    id_estudiante INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    id_curso INT,
+    FOREIGN KEY (id_curso) REFERENCES Cursos(id_curso)
+);
+
+-- Tabla de Profesores
+CREATE TABLE Profesores (
+    id_profesor INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE
+);
+
+-- Tabla de Asignaturas
+CREATE TABLE Asignaturas (
+    id_asignatura INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_asignatura VARCHAR(100) NOT NULL,
+    id_profesor INT,
+    FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
+);
+
+-- Tabla de Aulas
+CREATE TABLE Aulas (
+    id_aula INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_aula VARCHAR(50) NOT NULL,
+    capacidad INT
+);
+
+-- Tabla de Horarios
+CREATE TABLE Horarios (
+    id_horario INT PRIMARY KEY AUTO_INCREMENT,
+    id_curso INT,
+    id_asignatura INT,
+    id_aula INT,
+    dia_semana VARCHAR(20), -- Lunes, Martes, etc.
+    hora_inicio TIME,
+    hora_fin TIME,
+    FOREIGN KEY (id_curso) REFERENCES Cursos(id_curso),
+    FOREIGN KEY (id_asignatura) REFERENCES Asignaturas(id_asignatura),
+    FOREIGN KEY (id_aula) REFERENCES Aulas(id_aula)
+);</code></pre>
+            </div><br>
+            con este codigo dispondremos de las tablas necesarias para responder las siguientes consultas:<br>
+            ¿En qué horarios imparte clases el docente X y qué materias dicta en cada horario? <br>
+            ¿Qué docente imparte la materia X y en qué días y horas se dicta? <br>
+            ¿Qué materias imparte el docente X durante toda la semana? <br>
+            ¿Cuántas horas a la semana dicta el docente X y qué materias corresponden a esas horas? <br> 
+            ¿En qué días y en qué horarios se dicta la materia Base de Datos, y quién es el docente encargado? <br>
+            ¿Qué materias dicta el docente X los días lunes y miércoles? <br>
+            ¿Qué materias están programadas el miércoles y qué docente imparte cada una? <br>
+            ahora procedemos a insertar datos en las tablas para poder realizar las consultas:<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>-- Cursos
+INSERT INTO Cursos (nombre_curso) VALUES ('cuarto semestre');
+
+-- Profesores
+INSERT INTO Profesores (nombre, apellido, email) VALUES ('Darwin', 'Chamba', 'ChambaD@gmail.com'), ("Karelys", "Arredondo", "KareliA@gmail.com");
+
+-- Asignaturas
+INSERT INTO Asignaturas (nombre_asignatura, id_profesor) VALUES ('programacion orientada a objetos', 1), ("arquitectura de software",2), ("manejo de base de datos",1),("realidad nacional-deberes y derechos",2);
+
+-- Aulas
+INSERT INTO Aulas (nombre_aula, capacidad) VALUES ('aula1', 15), ('aula 7', 12);
+
+-- Horarios
+INSERT INTO Horarios (id_curso, id_asignatura, id_aula, dia_semana, hora_inicio, hora_fin)
+VALUES (1, 1, 1, 'martes', '06:00:00', '08:00:00');</code></pre>
+            </div>
+        <br>
+        </p>
     </div>
         </main>
     </body>
