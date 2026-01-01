@@ -478,11 +478,11 @@ DELIMITER ;</code></pre>
             <div class ="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>DELIMITER //
-                    create procedure elim_est (in id_est int)
-                    begin
-                        delete from estudiantes where id_estudiante = id_est;
-                    end //
-                DELIMITER ;</code></pre>
+            create procedure elim_est (in id_est int)
+            begin
+            delete from estudiantes where id_estudiante = id_est;
+            end //
+            DELIMITER ;</code></pre>
             </div><br>
             este procedimiento almacenado nos permite eliminar un estudiante de la tabla estudiantes usando su id_estudiante<br>
             ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
@@ -497,11 +497,11 @@ DELIMITER ;</code></pre>
             <div class ="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>DELIMITER //
-                    create procedure act_est (in id_est int, n varchar(500), a varchar (500), e varchar(500), id_c int)
-                    begin
-                    update estudiantes set nombre = n, apellido = a, email = e, id_curso = id_c where id_estudiante = id_est;
-                    end //
-                    delimiter ;</code></pre></div><br>
+            create procedure act_est (in id_est int, n varchar(500), a varchar (500), e varchar(500), id_c int)
+            begin
+            update estudiantes set nombre = n, apellido = a, email = e, id_curso = id_c where id_estudiante = id_est;
+            end //
+            delimiter ;</code></pre></div><br>
             este procedimiento almacenado nos permite actualizar los datos de un estudiante en la tabla estudiantes usando su id_estudiante<br>
             ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
             pero tendremos que añadir un nuevo estudiante para actualizarlo, en este caso añadiremos a "maria gonzalez"<br>
@@ -520,11 +520,11 @@ DELIMITER ;</code></pre>
             <div class ="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>DELIMITER //
-                    create procedure add_asig (in nom_asig varchar(100), id_prof int)
-                    begin
-                    insert into asignaturas (nombre_asignatura, id_profesor) values (nom_asig, id_prof);
-                    end //
-                    DELIMITER ;</code></pre></div><br>
+            create procedure add_asig (in nom_asig varchar(100), id_prof int)
+            begin
+            insert into asignaturas (nombre_asignatura, id_profesor) values (nom_asig, id_prof);
+            end //
+            DELIMITER ;</code></pre></div><br>
             este procedimiento almacenado nos permite añadir nuevas asignaturas a la tabla asignaturas<br>
             ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
             en este caso añadiremos la asignatura "desarrollo web" con el id del profesor 1<br>
