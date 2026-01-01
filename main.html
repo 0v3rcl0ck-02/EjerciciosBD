@@ -353,6 +353,89 @@ INSERT INTO Horarios (id_curso, id_asignatura, id_aula, dia_semana, hora_inicio,
 VALUES (1, 1, 1, 'martes', '06:00:00', '08:00:00');</code></pre>
             </div>
         <br>
+        aun faltan unos datos mas para realizar las consultas pero ya tenemos una base solida para empezar<br>
+        ahora procedemos con las consultas solicitadas:<br>
+        <div class ="code-block">
+            <div class ="code-header">SQL</div>
+            <pre><code>SELECT p.nombre AS docente, a.nombre_asignatura, h.dia_semana, h.hora_inicio, h.hora_fin
+FROM Horarios h
+JOIN Asignaturas a ON h.id_asignatura = a.id_asignatura
+JOIN Profesores p ON a.id_profesor = p.id_profesor
+WHERE p.nombre = 'Darwin';</code></pre><br>
+este codigo revela los horarios del docente X y las materias que dicta en cada horario<br>
+la visualizacion es la siguiente: <br>
+<img src="Imagenes/consultad4.1.png" alt="consulta deber 4 punto 1" width="400" height="auto"><br>
+el punto de consulta dos es el siguiente:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>SELECT a.nombre_asignatura, p.nombre AS docente, h.dia_semana, h.hora_inicio, h.hora_fin
+FROM Horarios h
+JOIN Asignaturas a ON h.id_asignatura = a.id_asignatura
+JOIN Profesores p ON a.id_profesor = p.id_profesor
+WHERE a.nombre_asignatura = 'arquitectura de software';</code></pre></div><br>
+este codigo nos indica que docente imparte la materia X y en que dias y horas se dicta<br>
+la visualizacion es la siguiente: <br>
+<img src="Imagenes/consultad4.2.png" alt="consulta deber 4 punto 2" width="400" height="auto"><br>
+la consulta numero tres es la siguiente:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>SELECT DISTINCT a.nombre_asignatura
+FROM Horarios h
+JOIN Asignaturas a ON h.id_asignatura = a.id_asignatura
+JOIN Profesores p ON a.id_profesor = p.id_profesor
+WHERE p.nombre = 'darwin';
+</code></pre></div><br>
+este codigo indica que materias imparte el docente X durante toda la semana<br>
+la visualizacion es la siguiente: <br>
+<img src="Imagenes/consultad4.3.png" alt="consulta deber 4 punto 3" width="400" height="auto"><br>
+la consulta numero cuatro es la siguiente:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>SELECT p.nombre AS docente, a.nombre_asignatura, 
+       SUM(TIMESTAMPDIFF(HOUR, h.hora_inicio, h.hora_fin)) AS horas_semana
+FROM Horarios h
+JOIN Asignaturas a ON h.id_asignatura = a.id_asignatura
+JOIN Profesores p ON a.id_profesor = p.id_profesor
+WHERE p.nombre = 'Darwin'
+GROUP BY a.nombre_asignatura;</code></pre></div><br>
+este codigo indica cuantas horas a la semana dicta el docente X y que materias corresponden a esas horas<br>
+la visualizacion es la siguiente: <br>
+<img src="Imagenes/consultad4.4.png" alt="consulta deber 4 punto 4" width="400" height="auto"><br>
+la consulta numero cinco es la siguiente:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>SELECT a.nombre_asignatura, p.nombre AS docente, h.dia_semana, h.hora_inicio, h.hora_fin
+FROM Horarios h
+JOIN Asignaturas a ON h.id_asignatura = a.id_asignatura
+JOIN Profesores p ON a.id_profesor = p.id_profesor
+WHERE a.nombre_asignatura = 'manejo de base de datos';</code></pre></div><br>
+este codigo indica en que dias y en que horarios se dicta la materia Base de Datos, y quien es el docente encargado<br>
+la visualizacion es la siguiente: <br>
+<img src="Imagenes/consultad4.5.png" alt="consulta deber 4 punto 5" width="400" height="auto"><br>
+la consulta numero seis es la siguiente:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>SELECT a.nombre_asignatura, h.dia_semana, h.hora_inicio, h.hora_fin
+FROM Horarios h
+JOIN Asignaturas a ON h.id_asignatura = a.id_asignatura
+JOIN Profesores p ON a.id_profesor = p.id_profesor
+WHERE p.nombre = 'darwin' AND h.dia_semana IN ('martes','jueves');</code></pre></div><br>
+este codigo indica que materias dicta el docente X los dias lunes y miercoles<br>
+la visualizacion es la siguiente: <br>
+<img src="Imagenes/consultad4.6.png" alt="consulta deber 4 punto 6" width="400" height="auto"><br>
+la consulta numero siete es la siguiente:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>SELECT a.nombre_asignatura, p.nombre AS docente, h.hora_inicio, h.hora_fin
+FROM Horarios h
+JOIN Asignaturas a ON h.id_asignatura = a.id_asignatura
+JOIN Profesores p ON a.id_profesor = p.id_profesor
+WHERE h.dia_semana = 'jueves';</code></pre></div><br>
+este codigo indica que materias estan programadas el jueves y que docente imparte cada una<br>
+la visualizacion es la siguiente: <br>
+<img src="Imagenes/consultad4.7.png" alt="consulta deber 4 punto 7" width="400" height="auto"><br>
+        </div></p>
+</div>
         </p>
     </div>
         </main>
