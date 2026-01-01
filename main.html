@@ -478,11 +478,11 @@ DELIMITER ;</code></pre>
             <div class ="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>DELIMITER //
-            create procedure elim_est (in id_est int)
-            begin
-            delete from estudiantes where id_estudiante = id_est;
-            end //
-            DELIMITER ;</code></pre>
+create procedure elim_est (in id_est int)
+begin
+delete from estudiantes where id_estudiante = id_est;
+end //
+DELIMITER ;</code></pre>
             </div><br>
             este procedimiento almacenado nos permite eliminar un estudiante de la tabla estudiantes usando su id_estudiante<br>
             ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
@@ -497,11 +497,11 @@ DELIMITER ;</code></pre>
             <div class ="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>DELIMITER //
-            create procedure act_est (in id_est int, n varchar(500), a varchar (500), e varchar(500), id_c int)
-            begin
-            update estudiantes set nombre = n, apellido = a, email = e, id_curso = id_c where id_estudiante = id_est;
-            end //
-            delimiter ;</code></pre></div><br>
+create procedure act_est (in id_est int, n varchar(500), a varchar (500), e varchar(500), id_c int)
+begin
+update estudiantes set nombre = n, apellido = a, email = e, id_curso = id_c where id_estudiante = id_est;
+end //
+delimiter ;</code></pre></div><br>
             este procedimiento almacenado nos permite actualizar los datos de un estudiante en la tabla estudiantes usando su id_estudiante<br>
             ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
             pero tendremos que añadir un nuevo estudiante para actualizarlo, en este caso añadiremos a "maria gonzalez"<br>
@@ -520,11 +520,11 @@ DELIMITER ;</code></pre>
             <div class ="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>DELIMITER //
-            create procedure add_asig (in nom_asig varchar(100), id_prof int)
-            begin
-            insert into asignaturas (nombre_asignatura, id_profesor) values (nom_asig, id_prof);
-            end //
-            DELIMITER ;</code></pre></div><br>
+create procedure add_asig (in nom_asig varchar(100), id_prof int)
+begin
+insert into asignaturas (nombre_asignatura, id_profesor) values (nom_asig, id_prof);
+end //
+DELIMITER ;</code></pre></div><br>
             este procedimiento almacenado nos permite añadir nuevas asignaturas a la tabla asignaturas<br>
             ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
             en este caso añadiremos la asignatura "desarrollo web" con el id del profesor 1<br>
@@ -533,7 +533,74 @@ DELIMITER ;</code></pre>
                 <pre><code>CALL add_asig('desarrollo web', 1);</code></pre></div><br>
             si todo salio bien, la asignatura desarrollo web deberia haber sido añadida en la tabla asignaturas, tal y como se ve en la imagen<br>
             <img src="Imagenes/test.proc.le4.png" alt="Prueba procedimiento almacenado leccion 1 add asignatura" width="400" height="auto"><br>
-            
+            el siguiente procedimento almacenado permitira registrar una nueva aula<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+create procedure add_aula (in nom_aula varchar(100), cant int)
+begin
+insert into aulas (nombre_aula, capacidad) values (nom_aula, cant);
+end //
+DELIMITER ;</code></pre></div><br>
+            este procedimiento almacenado nos permite añadir nuevas aulas a la tabla aulas<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
+            en este caso añadiremos la aula "aula 3" con la capacidad 10<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL add_aula('aula 3', 10);</code></pre></div><br>
+            si todo salio bien, la aula aula 3 deberia haber sido añadida en la tabla aulas, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le5.png" alt="Prueba procedimiento almacenado leccion 1 add aula" width="400" height="auto"><br>
+            ahora crearemos un procedimiento que permita borrar aulas<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+create procedure del_aula (in id_aul int)
+begin
+delete from aulas where id_aula = id_aul;
+end //
+DELIMITER ;</code></pre></div><br>
+            este procedimiento almacenado nos permite borrar aulas de la tabla aulas<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
+            en este caso borraremos la aula con id 3<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL del_aula(3);</code></pre></div><br>
+            si todo salio bien, la aula con id 3 deberia haber sido eliminada de la tabla aulas, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le6.png" alt="Prueba procedimiento almacenado leccion 1 delete aula" width="400" height="auto"><br>
+            ahora un proceso almacenado que permita añadir profesores<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+create procedure add_prof (in nom_prof varchar(100), ape_prof varchar(100), email_prof varchar(100))
+begin
+insert into profesores (nombre, apellido, email) values (nom_prof, ape_prof, email_prof);
+end //
+DELIMITER ;</code></pre></div><br>
+            este procedimiento almacenado nos permite añadir nuevos profesores a la tabla profesores<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
+            en este caso añadiremos al profesor "juan perez" con el email "juan.perez@ies.com"<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL add_prof('juan', 'perez', 'juan.perez@ies.com');</code></pre></div><br>
+            si todo salio bien, el profesor "juan perez" deberia haber sido añadido en la tabla profesores, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le7.png" alt="Prueba procedimiento almacenado leccion 1 add profesor" width="400" height="auto"><br>
+            ahora un procedimiento almacenado que permita eliminar profesores<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>DELIMITER //
+create procedure del_prof (in id_prof int)
+begin
+delete from profesores where id_profesor = id_prof;
+end //
+DELIMITER ;</code></pre></div><br>
+            este procedimiento almacenado nos permite eliminar profesores de la tabla profesores<br>
+            ahora podemos probarla y ver si funciona correctamente usando "call" y el nombre del procedimiento <br>
+            en este caso eliminaremos al profesor con id 3<br>
+            <div class ="code-block">
+                <div class ="code-header">SQL</div>
+                <pre><code>CALL del_prof(3);</code></pre></div><br>
+            si todo salio bien, el profesor con id 3 deberia haber sido eliminado de la tabla profesores, tal y como se ve en la imagen<br>
+            <img src="Imagenes/test.proc.le8.png" alt="Prueba procedimiento almacenado leccion 1 delete profesor" width="400" height="auto"><br>
         </p>
     </div>
 </main>
