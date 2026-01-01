@@ -36,27 +36,141 @@
         </p>
             </div>
             <div class="ejercicios">
-                <h3>Ejercicio Uno</h3>
+                <h3>Deber Dos</h3>
             <p>Consulta todos los estudiantes cuyo promedio sea mayor a 7. <br>
              <b>solucion:</b><br> Usando el codigo SQL: <br>
              <div class="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>SELECT Nombre, Apellido, Edad, Nota FROM estudiante WHERE Nota >= 7;</code></pre>
-            </div> <br>
-             se visualizara de la siguiente forma: <br>
+            </div> <br> donde select es el texto que imprimira la consulta, nombre, apellido, edad y nota son los valores que se visualizaran; 
+            from es el texto que nos indica de que tabla saldra la consulta, que en este caso es de la tabla estudiante; where es la condicion que indica donde inicia la seleccion de la consulta,
+            que seria donde las notas sean mayores o iguales a siete<br>
+             Y se visualizara de la siguiente forma: <br>
              <img src="Imagenes/Ejercicio2BD.png" alt="Ejercicio 2 BD" width="400" height="auto">
         </p>
     </div>
     <div class="ejercicios">
-        <h3>Ejercicio Tres</h3>
-        <p> Consulta los estudiantes cuya edad esté entre 18 y 20 años.<br>
-        Usando el codigo SQL: <br>
+        <h3>Deber Tres</h3>
+        <p> Diseñar y normalizar una base de datos para un sistema de gestión de calificaciones académicas. <br>
+            para esto haremos todo desde 0, y paso a paso añadiremos lo necesario para cumplir con los siguientes requisitos:<br>
+            Mostrar todos los alumnos que se encuentran en primer semestre en el paralelo <br>
+Mostrar todos los estudiantes que están en el paralelo B<br>
+Mostrar las materias que se imparten en primer semestre<br>
+Mostrar las materias que se imparten en segundo semestre<br>
+Mostrar todas las actividades de una materia específica<br>
+Mostrar el promedio final de la materia considerando:<br>
+Deberes: 30%<br>
+Lecciones: 20%<br>
+Examen: 50%<br>
+Mostrar todos los alumnos aprobados en primer semestre<br>
+Mostrar todos los alumnos suspensos en segundo semestre<br>
+para ello usamos el sigueinte codigo sql que añadira las tablas para la consulta<br>
         <div class="code-block">
             <div class ="code-header">SQL</div>
-            <pre><code>SELECT Nombre, Apellido, Edad, Nota FROM estudiante WHERE Edad >= 18 && Edad <= 20;</code></pre> 
+            <pre><code>-- Tabla de Estudiantes
+CREATE TABLE Estudiantes (
+    id_estudiante INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE,
+    email VARCHAR(100) UNIQUE,
+    id_curso INT
+);
+
+-- Tabla de Profesores
+CREATE TABLE Profesores (
+    id_profesor INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE
+);
+
+-- Tabla de Cursos
+CREATE TABLE Cursos (
+    id_curso INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_curso VARCHAR(100) NOT NULL
+);
+
+-- Tabla de Asignaturas
+CREATE TABLE Asignaturas (
+    id_asignatura INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_asignatura VARCHAR(100) NOT NULL,
+    id_profesor INT,
+    FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
+);
+
+-- Tabla de Calificaciones
+CREATE TABLE Calificaciones (
+    id_calificacion INT PRIMARY KEY AUTO_INCREMENT,
+    id_estudiante INT,
+    id_asignatura INT,
+    nota DECIMAL(4,2) CHECK (nota >= 0 AND nota <= 10),
+    fecha DATE,
+    FOREIGN KEY (id_estudiante) REFERENCES Estudiantes(id_estudiante),
+    FOREIGN KEY (id_asignatura) REFERENCES Asignaturas(id_asignatura)
+);</code></pre> 
         </div> <br>
-        se visualizara de la siguiente forma: <br>
-        <img src="Imagenes/Ejercicio3BD.png" alt="Ejercicio 3 BD" width="400" height="auto">
+        antes de esto tenemos que añadir la foreign key de la tabla estudiantes con Alter table<br>
+        <div class ="code-block">
+            <div class ="code-header">SQL</div>
+            <pre><code>ALTER TABLE Estudiantes
+ADD CONSTRAINT fk_estudiante_curso
+FOREIGN KEY (id_curso) REFERENCES Cursos(id_curso);</code></pre>
+        </div><br>
+        con esto ahora si podemos insertar datos para consultas usando los siguientes insert:<br>
+        <div class ="code-block">
+            <div class ="code-header">SQL</div>
+            <pre><code>INSERT INTO Cursos (nombre_curso) VALUES 
+('Primer Semestre - Paralelo A'),
+('Primer Semestre - Paralelo B'),
+('Segundo Semestre - Paralelo A'),
+('Segundo Semestre - Paralelo B');</code></pre>
+        </div><br>
+        <div class="code-block">
+            <div class="code-header">SQL</div>
+            <pre><code>INSERT INTO Estudiantes (nombre, apellido, fecha_nacimiento, email, id_curso) VALUES
+('Ana', 'Pérez', '2005-03-12', 'ana@mail.com', 1), -- 1er Semestre A
+('Luis', 'García', '2004-07-22', 'luis@mail.com', 1), -- 1er Semestre A
+('María', 'López', '2005-01-15', 'maria@mail.com', 2), -- 1er Semestre B
+('Pedro', 'Torres', '2004-11-05', 'pedro@mail.com', 2), -- 1er Semestre B
+('Sofía', 'Ramírez', '2003-09-30', 'sofia@mail.com', 3), -- 2do Semestre A
+('Carlos', 'Mendoza', '2003-05-18', 'carlos@mail.com', 4); -- 2do Semestre B</code></pre>
+        </div><br>
+        <div class="code-block">
+            <div class="code-header">SQL</div>
+            <pre><code>INSERT INTO Profesores (nombre, apellido, email) VALUES
+('Carlos', 'Gómez', 'cgomez@mail.com'),
+('Elena', 'Martínez', 'emartinez@mail.com');</code></pre>
+        </div><br>
+        <div class="code-block">
+            <div class="code-header">SQL</div>
+            <pre><code>INSERT INTO Asignaturas (nombre_asignatura, id_profesor) VALUES
+('Matemáticas I', 1), -- Primer semestre
+('Lengua y Literatura I', 2), -- Primer semestre
+('Física II', 1), -- Segundo semestre
+('Historia II', 2); -- Segundo semestre</code></pre>
+        </div><br>
+        aqui añadire una tabla mas con datos para la consulta de las actividades que tiene una materia<br>
+        <div class="code-block">
+            <div class="code-header">SQL</div>
+            <pre><code>INSERT INTO Asignaturas (nombre_asignatura, id_profesor) VALUES
+('Matemáticas I', 1), -- Primer semestre
+('Lengua y Literatura I', 2), -- Primer semestre
+('Física II', 1), -- Segundo semestre
+('Historia II', 2); -- Segundo semestre</code></pre>
+        </div> <br>
+        <div class="code-block">
+            <div class="code-header">SQL</div>
+            <pre><code>INSERT INTO Calificaciones (id_estudiante, id_asignatura, nota, fecha) VALUES
+(1, 1, 8.5, '2026-01-01'), -- Ana en Matemáticas I
+(2, 1, 7.0, '2026-01-01'), -- Luis en Matemáticas I
+(3, 2, 6.0, '2026-01-02'), -- María en Lengua I
+(4, 2, 4.5, '2026-01-02'), -- Pedro en Lengua I
+(5, 3, 9.0, '2026-01-03'), -- Sofía en Física II
+(6, 4, 5.0, '2026-01-03'); -- Carlos en Historia II</code></pre>
+        </div><br>
+        
+        
         </p>
     </div>
         </main>
