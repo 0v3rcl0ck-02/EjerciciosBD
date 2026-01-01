@@ -42,7 +42,7 @@
              <div class="code-block">
                 <div class ="code-header">SQL</div>
                 <pre><code>SELECT Nombre, Apellido, Edad, Nota FROM estudiante WHERE Nota >= 7;</code></pre>
-            </div> <br> donde select es el texto que imprimira la consulta, nombre, apellido, edad y nota son los valores que se visualizaran; 
+            </div> <br> donde select es el texto que imprimira la consulta, nombre, apellido, edad y nota son los valores que se visualizaran;<br> 
             from es el texto que nos indica de que tabla saldra la consulta, que en este caso es de la tabla estudiante; where es la condicion que indica donde inicia la seleccion de la consulta,
             que seria donde las notas sean mayores o iguales a siete<br>
              Y se visualizara de la siguiente forma: <br>
@@ -210,6 +210,52 @@ WHERE Cursos.nombre_curso LIKE '%Paralelo B%';</code></pre>
         </div><br>
         esta consulta se visualiza de esta manera: <br>
         <img src="Imagenes/consulta4.png" alt="resultado consulta 4" width="400" height="auto"><br>
+        ahora iremos con la consulta numero cinco: <br>
+        <div class="code-block">
+            <div class="code-header">SQL</div>
+            <pre><code>SELECT * FROM Actividades 
+WHERE id_asignatura = (SELECT id_asignatura FROM Asignaturas WHERE nombre_asignatura = 'Matemáticas I');</code></pre>
+        </div><br>
+        esta consulta revelara las asignaturas de una materia específica y se vera de esta forma: <br>
+        <img src="Imagenes/consulta5.png" alt="resultado de la consulta 5" width="400" height="auto"><br>
+        la siguiente consulta es la numero seis: <br>
+        <div class="code-block">
+            <div class="code-header">SQL</div>
+            <pre><code>SELECT e.nombre, e.apellido,
+       SUM(CASE WHEN a.tipo='Deber' THEN c.nota*0.3
+                WHEN a.tipo='Lección' THEN c.nota*0.2
+                WHEN a.tipo='Examen' THEN c.nota*0.5 END) AS promedio_final
+FROM Calificaciones c
+JOIN Estudiantes e ON c.id_estudiante = e.id_estudiante
+JOIN Asignaturas s ON c.id_asignatura = s.id_asignatura
+JOIN Actividades a ON s.id_asignatura = a.id_asignatura
+GROUP BY e.id_estudiante;</code></pre></div> <br>
+esta consulta revela el promedio de los estudiantes y se visualiza de la siguiente forma: <br>
+<img src="Imagenes/consulta6.png" alt="resultado consulta 6" width="400" height="auto"><br>
+la consulta numero siete solicita los alumnos aprobados en primer semestre: <br>
+<div class="code-block">
+    <div class="code-header">SQL</div>
+    <pre><code>SELECT e.nombre, e.apellido, c.nota
+FROM Estudiantes e
+JOIN Cursos cu ON e.id_curso = cu.id_curso
+JOIN Calificaciones c ON e.id_estudiante = c.id_estudiante
+WHERE cu.nombre_curso LIKE 'Primer Semestre%' AND c.nota >= 7;</code></pre>
+</div><br>
+esta consulta revela los alumnos aprobados en primer semestre y se visualiza de la siguiente forma: <br>
+<img src="Imagenes/consulta7.png" alt="resultado consulta 7" width="400" height="auto"><br>
+por ultimo la consulta numero ocho: <br>
+<div class="code-block">
+    <div class="code-header">SQL</div>
+    <pre><code>SELECT e.nombre, e.apellido, c.nota
+FROM Estudiantes e
+JOIN Cursos cu ON e.id_curso = cu.id_curso
+JOIN Calificaciones c ON e.id_estudiante = c.id_estudiante
+WHERE cu.nombre_curso LIKE 'Segundo Semestre%' AND c.nota < 7;
+    </code></pre>
+</div><br>
+esta consulta señala a los alumnos suspensos en segundo semestre y se visualiza de la siguiente forma: <br>
+<img src="Imagenes/consulta8.png" alt="resultado consulta 8" width="400" height="auto"><br>
+
     </p>
     </div>
         </main>
