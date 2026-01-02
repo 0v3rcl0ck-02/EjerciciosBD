@@ -601,8 +601,172 @@ DELIMITER ;</code></pre></div><br>
                 <pre><code>CALL del_prof(3);</code></pre></div><br>
             si todo salio bien, el profesor con id 3 deberia haber sido eliminado de la tabla profesores, tal y como se ve en la imagen<br>
             <img src="Imagenes/test.proc.le8.png" alt="Prueba procedimiento almacenado leccion 1 delete profesor" width="400" height="auto"><br>
+            
         </p>
     </div>
+    <div class="ejercicios">
+        <h3>leccion 2: Triggers en SQL</h3><br>
+        <p>
+        Un trigger es un objeto de base de datos que se ejecuta automáticamente cuando ocurre un evento específico en una tabla,<br>
+         como una inserción, actualización o eliminación.<br>
+         ¿Para qué se utilizan los triggers?
+
+Validar datos antes de que sean insertados o actualizados. <br>
+
+Automatizar procesos dentro de la base de datos. <br>
+
+Mantener consistencia y reglas de negocio.<br>
+
+Llevar un control de auditoría sobre las operaciones.<br>
+       ¿En qué momentos se ejecutan? <br>
+
+BEFORE: Antes de que se ejecute la operación (INSERT, UPDATE, DELETE). <br>
+
+AFTER: Después de que se ejecute la operación. <br>
+
+Ejemplos comunes de uso <br>
+
+Validar que un campo no tenga valores inválidos. <br>
+
+Convertir automáticamente datos a un formato estándar (ejemplo: mayúsculas). <br>
+
+Registrar en una tabla de auditoría las operaciones realizadas. <br>
+a continuacion el ejercicio a ejecutar es crear una base de datos nueva la cual llamaremos "leccion2_triggers"<br>
+y en ella crearemos una tabla llamada "personas" con el siguiente codigo SQL:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>CREATE TABLE Personas (id_persona INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,apellido VARCHAR(100) NOT NULL,edad int, nota decimal(4,2), fecha datetime);</code></pre>
+</div><br>
+y otra tabla llamada auditoria con el siguiente codigo SQL:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>CREATE TABLE Auditoria (id_auditoria INT PRIMARY KEY AUTO_INCREMENT,accion VARCHAR(50),
+    id_persona Int, fecha_accion DATETIME);</code></pre>
+</div><br>
+sobre la tabla auditoria crearemos los triggers que registraran las acciones realizadas en la tabla personas<br>
+el primer trigger sera el date para que sea now() y se vera de la siguiente manera:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>DELIMITER //
+CREATE TRIGGER set_fecha_before_insert
+BEFORE INSERT ON Personas
+FOR EACH ROW
+BEGIN
+    SET NEW.fecha = NOW();
+END //
+DELIMITER ;</code></pre>
+</div><br>
+este trigger establece la fecha actual antes de insertar un nuevo registro en la tabla personas<br>
+el siguiente trigger sera para establecer cada registro de auditoria en now<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>delimiter //
+create trigger validacion_fecha_auditoria
+before insert on auditoria
+for each row
+begin
+    set new.fecha_accion = now();
+end //
+delimiter ;</code></pre>
+</div><br>
+este trigger establece la fecha y hora actual antes de que el trigger lanze un nuevo registro en la tabla auditoria<br>
+ahora crearemos un trigger que registre cada insercion en la tabla personas<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>DELIMITER //
+CREATE TRIGGER after_persona_insert
+AFTER INSERT ON Personas
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, id_persona) VALUES ('INSERT', NEW.id_persona);
+END //
+DELIMITER ;</code></pre>
+</div><br>
+este trigger detalla que en la tabla persona ocurro un nuevo registro y lo añade a la tabla auditoria<br>
+<h4>nota: las capturas esta vez seran adjuntadas al final de todo el ejercicio</h4><br>
+ahora crearemos un trigger que registre cada eliminacion en la tabla personas<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>DELIMITER //
+CREATE TRIGGER after_persona_delete
+AFTER DELETE ON Personas
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, id_persona) VALUES ('DELETE', OLD.id_persona);
+END //
+DELIMITER ;</code></pre></div><br>
+este trigger detalla que en la tabla persona se elimino un registro y lo añade a la tabla auditoria<br>
+con esos 2 triggers ya podemos ver como funciona el sistema de auditoria<br>
+insertaremos 3 registros en la tabla personas para ver como funciona el trigger de insercion<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>INSERT INTO Personas (nombre, apellido, edad, nota) VALUES 
+('juan', 'perez', 20, 8.5),
+('maria', 'lopez', 22, 9.0),
+('carlos', 'gomez', 19, 7.5);</code></pre></div><br> 
+si el trigger funciona correctamente, deberia haberse registrado 3 nuevas entradas en la tabla auditoria como en la imagen<br>
+<img src="Imagenes/lec2.ins.png" alt="evidencia de la insercion trigger leccion 2" width="400" height="auto"><br>
+ahora probaremos el trigger de eliminacion eliminando un registro de la tabla personas<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>DELETE FROM Personas WHERE id_persona = 2;</code></pre></div><br>
+    si el trigger de delete funciona correctamente, deberia haberse registrado una nueva entrada en la tabla auditoria como en la imagen<br>
+    <img src="Imagenes/lec2.del.png" alt="evidencia de la eliminacion trigger leccion 2" width="400" height="auto"><br>   
+    ahora podemos crear unos trigger que validen nota, edad evitando que; nota sea mayor a 10 o menor a 0 y que edad no sea menor a 0<br>
+   el trigger para que la nota no sea menor a 10 sera de la siguiente forma:<br>
+   <div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>DELIMITER //
+CREATE TRIGGER validar_nota_before_insert
+BEFORE INSERT ON Personas
+FOR EACH ROW
+BEGIN
+if new.nota < 0 then
+    set new.nota = 0;
+    end if; 
+</code></pre></div><br>
+este trigger valida que la nota no sea menor a 0, si lo es la establece en 0<br>
+ahora el trigger para que la nota no sea mayor a 10 sera de la siguiente forma:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>delimiter //
+        create trigger verif_nota_mayor
+        before insert on personas
+        for each row
+        begin
+        if new.nota > 10 then
+            set new.nota = 10;
+        end if;
+        end //
+        delimiter ;</code></pre></div><br>
+este trigger valida que la nota no sea mayor a 10, si lo es la establece en 10<br>
+ahora el trigger para que la edad no sea negativa es la siguiente:<br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>DELIMITER //
+CREATE TRIGGER validar_edad_before_insert
+BEFORE INSERT ON Personas
+FOR EACH ROW
+BEGIN
+if new.edad < 0 then
+set new.edad = new.edad*-1;
+end if;
+END //
+DELIMITER ;</code></pre></div><br>
+este trigger valida que la edad no sea negativa, si lo es la establece en positiva<br>
+ahora probaremos los 3 triggers insertando los siguientes registros<br>
+un registro con nota -5, otro con nota de 18, otro con edad de -22 <br>
+<div class ="code-block">
+    <div class ="code-header">SQL</div>
+    <pre><code>INSERT INTO Personas (nombre, apellido, edad, nota) VALUES 
+('ana', 'martinez', 21, -5),
+('luis', 'fernandez', 23, 18),
+('sofia', 'ruiz', -22, 9);</code></pre></div><br>
+si los triggers funcionan correctamente, los registros deberian verse de la siguiente manera en la tabla personas<br>
+<img src="Imagenes/lec2.3t.png" alt="validacion de los 3 triggers leccion 2" width="400" height="auto"><br>
+</p>
+</div>
 </main>
     </body>
 </html>
