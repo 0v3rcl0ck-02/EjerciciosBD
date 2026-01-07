@@ -835,6 +835,89 @@ ejemplo visual de la seleccion de la vista con el id de persona 1<br>
 <img src="Imagenes/lec3.1.png" alt="resultado vista leccion 3" width="400" height="auto"><br>
     </p>
 </div>
+<div class="ejercicios">
+    <h3>Examen Final</h3>
+    <p>Este trabajo parte de una tabla no normalizada de ventas y desarrolla el proceso completo hasta la Tercera Forma Normal (3FN), diseñando el modelo de base de datos, procedimientos almacenados, triggers, vistas y la página web principal.</p>
+
+    <p><b>Concepto uno: Normalización</b><br>
+    <b>Definición:</b> Es el proceso de organizar los datos en tablas para eliminar redundancias y dependencias incorrectas.<br>
+    <b>Etapas:</b><br>
+    - 1FN: atributos atómicos, sin grupos repetidos.<br>
+    - 2FN: dependencias completas respecto a claves primarias.<br>
+    - 3FN: eliminación de dependencias transitivas.<br>
+    <strong>Ejemplo SQL</strong>
+    <div class="code-block">
+        <div class="code-header">SQL</div>
+        <pre><code>CREATE TABLE cliente (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_cliente VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) UNIQUE
+);
+
+CREATE TABLE producto (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_producto VARCHAR(120) NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    categoria VARCHAR(80)
+);</code></pre>
+    </div><br>
+    Estas tablas separan los datos de clientes y productos, evitando redundancia y asegurando integridad. 
+    La tabla <code>cliente</code> almacena únicamente información de compradores, mientras que <code>producto</code> guarda el catálogo de artículos con su precio y categoría.</p>
+
+    <p><b>Concepto dos: Claves</b><br>
+    <b>Clave primaria:</b> identificador único de cada tabla.<br>
+    <b>Clave foránea:</b> conecta una tabla con otra, generando relaciones.<br>
+    <strong>Ejemplo SQL</strong>
+    <div class="code-block">
+        <div class="code-header">SQL</div>
+        <pre><code>CREATE TABLE venta (
+    id_venta INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    fecha DATE NOT NULL,
+    total_venta DECIMAL(12,2) DEFAULT 0.00,
+    CONSTRAINT fk_venta_cliente FOREIGN KEY (cliente_id)
+        REFERENCES cliente(id_cliente)
+);</code></pre>
+    </div><br>
+    Aquí la clave foránea <code>cliente_id</code> conecta la venta con el cliente. 
+    Esto asegura que cada venta esté asociada a un comprador existente y mantiene la integridad referencial.</p>
+
+    <p><b>Concepto tres: Relaciones</b><br>
+    - Uno a uno: un registro de una tabla se relaciona con uno de otra.<br>
+    - Uno a muchos: un registro de una tabla se relaciona con varios de otra.<br>
+    - Muchos a muchos: requiere tabla intermedia.<br>
+   <iframe width="560" height="315" src='https://dbdiagram.io/e/695da58639fa3db27b497afa/695dae7c39fa3db27b49e29f'> </iframe><br>
+    En el modelo de ventas, un cliente puede tener muchas ventas (relación uno a muchos), y cada venta puede tener muchos productos (relación uno a muchos a través de detalle_venta). 
+    Esto refleja la realidad de un sistema de ventas donde un cliente realiza múltiples compras y cada compra incluye varios artículos.</p>
+
+    <p><b>Concepto cuatro: Inserción de datos</b><br>
+    Se añadieron clientes y productos de prueba para validar el modelo.<br>
+    <strong>Ejemplo SQL</strong>
+    <div class="code-block">
+        <div class="code-header">SQL</div>
+        <pre><code>-- Insertar clientes
+INSERT INTO cliente (nombre_cliente, telefono) VALUES
+('Saul', '0921347112'),
+('Laura', '0986754231'),
+('Leonardo', '0998271483'),
+('Carlos', '976543210'),
+('Maria', '985432198');
+
+-- Insertar productos
+INSERT INTO producto (nombre_producto, precio_unitario, categoria) VALUES
+('Laptop gaming', 1200.00, 'Computación'),
+('Laptop básica', 650.00, 'Computación'),
+('Mouse inalámbrico', 25.50, 'Accesorios'),
+('Teclado mecánico', 89.99, 'Accesorios'),
+('Monitor 24''', 299.99, 'Monitores'),
+('Audífonos bluetooth', 75.00, 'Audio'),
+('Tablet 10''', 349.50, 'Tablets'),
+('Cargador USB-C', 19.99, 'Accesorios');</code></pre>
+    </div><br>
+    Estos registros permiten realizar pruebas de ventas y detalles. 
+    Los clientes representan usuarios reales del sistema y los productos conforman el catálogo inicial. 
+    Con estos datos se pueden simular transacciones y verificar que los triggers y vistas funcionen correctamente.</p>
+</div>
 </main>
     </body>
 </html>
